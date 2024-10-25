@@ -44,13 +44,11 @@ func (service ProjectServiceImpl) FindById(ctx *gin.Context, request web.Project
 
 func (service ProjectServiceImpl) Add(ctx *gin.Context, request web.ProjectCreateRequest) (domain.Project, error) {
 	user := ctx.MustGet("user").(domain.User)
-	startDate, _ := time.Parse("2006-01-02", request.StartDate)
-	endDate, _ := time.Parse("2006-01-02", request.EndDate)
 	project := domain.Project{
 		Name:        request.Name,
 		Description: request.Description,
-		StartDate:   startDate,
-		EndDate:     endDate,
+		StartDate:   parseDate(request.StartDate),
+		EndDate:     parseDate(request.EndDate),
 		CreatedBy:   user.ID,
 	}
 	create, err := service.repositoryProject.Create(project)
@@ -61,14 +59,14 @@ func (service ProjectServiceImpl) Add(ctx *gin.Context, request web.ProjectCreat
 }
 
 func (service ProjectServiceImpl) Update(ctx *gin.Context, request web.ProjectUpdateRequest) (domain.Project, error) {
-	startDate, _ := time.Parse(time.RFC3339, request.StartDate)
-	endDate, _ := time.Parse(time.RFC3339, request.EndDate)
+	user := ctx.MustGet("user").(domain.User)
 	project := domain.Project{
 		ID:          request.ID,
 		Name:        request.Name,
 		Description: request.Description,
-		StartDate:   startDate,
-		EndDate:     endDate,
+		StartDate:   parseDate(request.StartDate),
+		EndDate:     parseDate(request.EndDate),
+		CreatedBy:   user.ID,
 	}
 	update, err := service.repositoryProject.Update(project)
 	if err != nil {
@@ -90,4 +88,8 @@ func (service ProjectServiceImpl) Delete(ctx *gin.Context, request web.ProjectFi
 		return errors.New("an unexpected error occurred while accessing the database")
 	}
 	return nil
+}
+func parseDate(date string) time.Time {
+	result, _ := time.Parse("2006-01-02", date)
+	return result
 }

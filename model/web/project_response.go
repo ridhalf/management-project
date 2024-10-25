@@ -38,3 +38,23 @@ func ToPorjectResponses(projects []domain.Project) []ProjectResponse {
 	}
 	return projectResponses
 }
+
+type ProjectUpsertResponse struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"start_date"`
+	EndDate     string `json:"end_date"`
+	AuthoredId  int    `json:"authored_id"`
+}
+
+func ToProjectUpsertResponse(project domain.Project) ProjectUpsertResponse {
+	return ProjectUpsertResponse{
+		ID:          project.ID,
+		Name:        project.Name,
+		Description: project.Description,
+		StartDate:   project.StartDate.Format("2006-01-02"),
+		EndDate:     project.EndDate.Format("2006-01-02"),
+		AuthoredId:  project.CreatedBy,
+	}
+}

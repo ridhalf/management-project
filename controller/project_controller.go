@@ -63,7 +63,7 @@ func (controller ProjectControllerImpl) Add(ctx *gin.Context) {
 		HandleServiceError(ctx, err)
 		return
 	}
-	responses := web.ToProjectResponse(project)
+	responses := web.ToProjectUpsertResponse(project)
 	HandleRequestSuccess(ctx, "successfully added the data.", responses)
 	return
 }
@@ -80,7 +80,7 @@ func (controller ProjectControllerImpl) Update(ctx *gin.Context) {
 		HandleServiceError(ctx, err)
 		return
 	}
-	responses := web.ToProjectResponse(project)
+	responses := web.ToProjectUpsertResponse(project)
 	HandleRequestSuccess(ctx, "successfully updated the data.", responses)
 	return
 }

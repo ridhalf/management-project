@@ -36,11 +36,11 @@ func main() {
 	api.POST("/users/login", userController.Login)
 	api.GET("/users/:id", userController.FindById)
 
-	api.GET("/projects", projectController.FindAll)
-	api.GET("/projects/:id", projectController.FindById)
+	api.GET("/projects", authMiddleware, projectController.FindAll)
+	api.GET("/projects/:id", authMiddleware, projectController.FindById)
 	api.POST("/projects", authMiddleware, projectController.Add)
-	api.PUT("/projects", projectController.Update)
-	api.DELETE("/projects/:id", projectController.Delete)
+	api.PUT("/projects", authMiddleware, projectController.Update)
+	api.DELETE("/projects/:id", authMiddleware, projectController.Delete)
 
 	err := router.Run(os.Getenv("DOMAIN"))
 	if err != nil {
