@@ -24,6 +24,9 @@ func NewProjectController(serviceProject service.ProjectService) ProjectControll
 }
 
 func (controller ProjectControllerImpl) FindAll(ctx *gin.Context) {
+	if !AllowReadProject(ctx) {
+		return
+	}
 	projects, err := controller.serviceProject.FindAll(ctx)
 	if err != nil {
 		HandleServiceError(ctx, err)
@@ -35,6 +38,9 @@ func (controller ProjectControllerImpl) FindAll(ctx *gin.Context) {
 }
 
 func (controller ProjectControllerImpl) FindById(ctx *gin.Context) {
+	if !AllowReadProject(ctx) {
+		return
+	}
 	var request web.ProjectFindByIdRequest
 	err := ctx.ShouldBindUri(&request)
 	if err != nil {
@@ -52,6 +58,9 @@ func (controller ProjectControllerImpl) FindById(ctx *gin.Context) {
 }
 
 func (controller ProjectControllerImpl) Add(ctx *gin.Context) {
+	if !AllowReadProject(ctx) {
+		return
+	}
 	request := web.ProjectCreateRequest{}
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
@@ -69,6 +78,9 @@ func (controller ProjectControllerImpl) Add(ctx *gin.Context) {
 }
 
 func (controller ProjectControllerImpl) Update(ctx *gin.Context) {
+	if !AllowReadProject(ctx) {
+		return
+	}
 	request := web.ProjectUpdateRequest{}
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
@@ -86,6 +98,9 @@ func (controller ProjectControllerImpl) Update(ctx *gin.Context) {
 }
 
 func (controller ProjectControllerImpl) Delete(ctx *gin.Context) {
+	if !AllowReadProject(ctx) {
+		return
+	}
 	request := web.ProjectFindByIdRequest{}
 	err := ctx.ShouldBindUri(&request)
 	if err != nil {
